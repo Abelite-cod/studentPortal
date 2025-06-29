@@ -27,16 +27,34 @@ const newStudent = async (req, res) => {
         }
 };
 
-// Read all students
-const getAllStudents = async(req, res) => {
+// Read all students OR Read all students with pagination and optional filtering
+const getAllStudents = async (req, res) => {
     try {
-        const students = await User.find();
-            res.status(200).json(students);
-    }catch (error) {
+        const { page = 1, limit = 10, lastName } = req.query;
+
+        const filter = {};
+        if (lastName) {
+            filter.lastName = { $regex: lastName, $options: 'i' }; // Case-insensitive match
+        }
+
+        const skip = (page - 1) * limit;
+        const students = await User.find(filter).skip(skip).limit(Number(limit));
+        const totalFind = await User.countDocuments(filter);
+        const totalPages = Math.ceil(totalFind / limit);
+        res.status(200).json({
+            page: Number(page),
+            limit: Number(limit),
+            totalFind,
+            totalPages,
+            students
+        });
+    } catch (error) {
         console.error("Error fetching Students:", error);
-        res.status(500).json({message: "internal server error"})
+        res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
 
 // Read a student by ID
 const getStudentByID = async (req, res) => {
