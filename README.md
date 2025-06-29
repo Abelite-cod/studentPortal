@@ -3,6 +3,26 @@
 
 A RESTful API built with **Node.js**, **Express**, and **MongoDB** to manage student records—register, update, delete, fetch, and count students.
 
+**FEATURES**
+
+Register a new student
+
+Get all students
+
+Get a student by ID
+
+Update a student
+
+Delete a student
+
+Get total count of students
+
+Pagination support for listing students: ?page=1&limit=10
+
+Filtering by last name: ?lastName=Smith
+
+Combine pagination and filtering: /api/users/students/all?page=2&limit=5&lastName=Smith
+
 ---
 
 ## 🚀 Setup Instructions
@@ -66,7 +86,7 @@ Student updates are performed via ID for clarity.
 
 Validation ensures all required fields are present.
 
-The API follows proper REST conventions and returns status codes like:
+The API follows proper REST requests and returns status codes like:
 
 400 – Bad Request (e.g., missing fields)
 
